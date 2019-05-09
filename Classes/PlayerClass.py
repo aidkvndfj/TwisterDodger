@@ -1,49 +1,54 @@
 import pygame
 import os
+import Eric_Dumb_Module as edm
 
+# Setup Images
 gameFolder = os.path.dirname("..")
 imgFolder = os.path.join(gameFolder, 'Images')
-
-# Colors
-WHITE = (255, 255, 255)
+playerImage = pygame.image.load(os.path.join(imgFolder, 'Player.png'))
 
 class Player(pygame.sprite.Sprite):
-    def __init__(self, HEIGHT, WIDTH):
-        playerImage = pygame.image.load(os.path.join(imgFolder, 'Player.png'))
-
+    def __init__(self, WIDTH, HEIGHT, GROUNDHEIGHT):
         pygame.sprite.Sprite.__init__(self)
-        # Player image Setup
         self.image = playerImage
-        # self.image = pygame.Surface((20, 60)) # Make the food slightly smaller than the head/tail
-        # self.image.fill(WHITE) # Make the food white
-        self.rect = self.image.get_rect() #set the rect to the image rect
-        self.rect.centerx = 200 # Set the x to given x
-        self.rect.centery = HEIGHT - 100 # Set the y to given y
+        self.rect = self.image.get_rect()
+        self.rect.centerx = 200
+        self.rect.centery = HEIGHT - 100
+
         # Player Variables
         self.gravity = 1
-        self.xVel = 10
-        self.yVel = 0
+        self.vel = edm.Vector(10, 0)
         self.screenHeight = HEIGHT
         self.screenWidth = WIDTH
+        self.groundHeight = GROUNDHEIGHT
         self.health = 100
-        self.regenTimer = 0
 
     def update(self):
-        if (self.rect.bottom < self.screenHeight):
-            self.yVel += self.gravity
-        if (self.rect.bottom > self.screenHeight):
-            self.rect.bottom = self.screenHeight
-            self.yVel = 0
-        self.rect.centery += self.yVel
+        # Movement
         key = pygame.key.get_pressed()
         if (key[pygame.K_LEFT]):
-            self.rect.centerx += -self.xVel + 2
+    
+    def update(self):
+
+    def update(self):
+        # Movement
+        key = pygame.key.get_pressed()
+        if (key[pygame.K_LEFT]):
+        # Movement
+        key = pygame.key.get_pressed()
+        if (key[pygame.K_LEFT]):
+        key = pygame.key.get_pressed()
+        if (key[pygame.K_LEFT]):
+            self.rect.x -= self.vel.x
         if (key[pygame.K_RIGHT]):
-            self.rect.centerx += self.xVel - 2
-        if (self.rect.left < 0):
-            self.rect.left = 0
-        if (self.rect.right > self.screenWidth - 200):
-            self.rect.right = self.screenWidth - 200
+            self.rect.x += self.vel.x
+
+        # Gravity
+        self.rect.y += self.vel.y
+        if (self.rect.bottom > self.screenHeight - self.groundHeight):
+            self.rect.bottom = self.screenHeight - self.groundHeight
+        else:
+            self.vel.y += self.gravity
 
     def GetHit(self):
         self.health -= 34
