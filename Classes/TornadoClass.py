@@ -18,4 +18,4 @@ class Tornado(pygame.sprite.Sprite):
         # self.image.fill(RED) # Make the food white
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.x = WIDTH - 350 # Set the x to given x
-        self.rect.y = 0 # Set the y to given y
+        self.rect.y = -20 # Set the y to given y

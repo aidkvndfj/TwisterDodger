@@ -22,40 +22,37 @@ class Player(pygame.sprite.Sprite):
         self.screenWidth = WIDTH
         self.groundHeight = GROUNDHEIGHT
         self.health = 100
+        self.regenTimer = 0
 
     def update(self):
         # Movement
-        key = pygame.key.get_pressed()
-        if (key[pygame.K_LEFT]):
-    
-    def update(self):
-
-    def update(self):
-        # Movement
-        key = pygame.key.get_pressed()
-        if (key[pygame.K_LEFT]):
-        # Movement
-        key = pygame.key.get_pressed()
-        if (key[pygame.K_LEFT]):
         key = pygame.key.get_pressed()
         if (key[pygame.K_LEFT]):
             self.rect.x -= self.vel.x
         if (key[pygame.K_RIGHT]):
             self.rect.x += self.vel.x
+        if (self.rect.x < 0):
+            self.rect.x = 0
+        if (self.rect.x > 750):
+            self.rect.x = 750
 
         # Gravity
         self.rect.y += self.vel.y
         if (self.rect.bottom > self.screenHeight - self.groundHeight):
             self.rect.bottom = self.screenHeight - self.groundHeight
+            self.vel.y = 0
         else:
             self.vel.y += self.gravity
 
     def GetHit(self):
         self.health -= 34
         self.regenTimer = 5
+        if (self.health < 0):
+            self.health = -0.1
 
     def drainHP(self):
-        self.health -= 0.5
+        if (self.health > 0):
+            self.health -= 0.5
 
     def regenHP(self):
         if (self.health < 100 and self.regenTimer <= 0):
@@ -64,4 +61,5 @@ class Player(pygame.sprite.Sprite):
             self.regenTimer -= 0.1
 
     def Jump(self):
-        self.yVel -= 10
+        if (self.rect.bottom > self.screenHeight - self.groundHeight - 10):
+            self.vel.y -= 15
