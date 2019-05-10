@@ -19,6 +19,7 @@ sys.path.insert(0, 'Classes')
 from DebrisClass import *
 from PlayerClass import *
 from TornadoClass import *
+from FireClass import *
 
 def Game():
     # Constants
@@ -79,7 +80,8 @@ def Game():
     # Sprites
     player = Player(WIDTH, HEIGHT, groundHeight)
     tornado = Tornado(WIDTH, HEIGHT)
-    allSprites.add(player, tornado)
+    fire = Fire(WIDTH, HEIGHT, groundHeight)
+    allSprites.add(player, tornado, fire)
 
     running = True
     while (running):
@@ -102,6 +104,7 @@ def Game():
         # Update Sprites
         allSprites.update()
         debrisSprites.update()
+        fire.updateFire(player.rect.x, player.rect.y, player.rect.width, player.rect.height)
 
         # Update Text
         end = time.time()
