@@ -12,3 +12,11 @@ Bitter mr c	15.36s
 
 None	10.13s
 Gurveer	131.13s
+SLAM	43.43s
+LAMB	18.06s
+LAMB	18.94s
+LAMB	9.24s
+LAMB	38.12s
+SLAM	59.81s
+None	10.19s
+None	34.38s

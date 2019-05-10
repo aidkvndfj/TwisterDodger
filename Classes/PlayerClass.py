@@ -22,7 +22,9 @@ class Player(pygame.sprite.Sprite):
         self.screenWidth = WIDTH
         self.groundHeight = GROUNDHEIGHT
         self.health = 100
+        self.fuel = 100
         self.regenTimer = 0
+        self.fuelTimer = 0
 
     def update(self):
         # Movement
@@ -36,6 +38,7 @@ class Player(pygame.sprite.Sprite):
         if (self.rect.x > 750):
             self.rect.x = 750
 
+
         # Gravity
         self.rect.y += self.vel.y
         if (self.rect.bottom > self.screenHeight - self.groundHeight):
@@ -44,22 +47,44 @@ class Player(pygame.sprite.Sprite):
         else:
             self.vel.y += self.gravity
 
+        if (key[pygame.K_SPACE] and self.fuel > 0):
+            self.Rocket()
+        if (self.rect.y <= 0 ):
+            self.rect.y = 0
+            self.vel.y = 1
+
+        # Health and Fuel
+        if (self.rect.x > 600):
+            self.DrainHP()
+        else:
+            self.RegenHP()
+
+        self.RegenFuel()
+
     def GetHit(self):
         self.health -= 34
         self.regenTimer = 5
         if (self.health < 0):
             self.health = -0.1
 
-    def drainHP(self):
+    def DrainHP(self):
         if (self.health > 0):
             self.health -= 0.5
 
-    def regenHP(self):
+    def RegenHP(self):
         if (self.health < 100 and self.regenTimer <= 0):
             self.health += 1
         else:
             self.regenTimer -= 0.1
 
-    def Jump(self):
-        if (self.rect.bottom > self.screenHeight - self.groundHeight - 10):
-            self.vel.y -= 15
+    def Rocket(self):
+        self.fuelTimer = 5
+        if (self.vel.y > -15):
+            self.vel.y -= 2
+            self.fuel -= 2
+
+    def RegenFuel(self):
+        if (self.fuel < 100 and self.fuelTimer <= 0):
+            self.fuel += 1
+        else:
+            self.fuelTimer -= 0.1

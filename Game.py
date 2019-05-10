@@ -28,10 +28,11 @@ def Game():
     FPS = 30
 
     # Define Colors
-    BACKGROUND = (160, 145, 250)
-    RED        = (255, 0, 0)
-    GRASS      = (40, 120, 20)
-    GROUND     = (120, 70, 20)
+    BACKGROUND           = (160, 145, 250)
+    RED                  = (255, 0, 0)
+    GRASS                = (40, 120, 20)
+    GROUND               = (120, 70, 20)
+    FUEL                 = (255, 200, 50)
 
     # Variables
     global groundHeight
@@ -50,7 +51,9 @@ def Game():
 
     # Font Setup
     gameFont = pygame.font.Font(None, 25)
+    fuelFont = pygame.font.Font(None, 20)
     healthText = gameFont.render("Health:", True, (0, 0, 0))
+    fuelText = fuelFont.render("Fuel:", True, (0, 0, 0))
 
     #~~~~~~~~~ Functions ~~~~~~~~~#
     def spawnDebris():
@@ -87,19 +90,11 @@ def Game():
             running = False
         if(pygame.sprite.spritecollide(player, debrisSprites, True)):
             player.GetHit()
-        if (player.rect.x > 600):
-            player.drainHP()
-        else:
-            player.regenHP()
 
         # Game events
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): # If the 'X' in the corner is clicked exit
                 running = False
-            if (event.type == pygame.KEYDOWN):
-                key = pygame.key.get_pressed()
-                if (key[pygame.K_SPACE]):
-                    player.Jump()
 
         # Spawn Debris
         spawnDebris()
@@ -114,11 +109,13 @@ def Game():
 
         # Draw Frame
         screen.fill(BACKGROUND)
+        pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30))
+        pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2.5, 15))
         debrisSprites.draw(screen)
         drawGround()
         allSprites.draw(screen)
-        pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30))
         screen.blit(healthText, (10, 10))
+        screen.blit(fuelText, (10, 65))
         screen.blit(timeText, (WIDTH - 95, HEIGHT - 25))
 
         pygame.display.flip()
