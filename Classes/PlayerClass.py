@@ -30,9 +30,9 @@ class Player(pygame.sprite.Sprite):
         # Movement
         key = pygame.key.get_pressed()
         if (key[pygame.K_LEFT]):
-            self.rect.x -= self.vel.x
+            self.rect.x -= self.vel.x - 2
         if (key[pygame.K_RIGHT]):
-            self.rect.x += self.vel.x
+            self.rect.x += self.vel.x + 2
         if (self.rect.x < 0):
             self.rect.x = 0
         if (self.rect.x > 750):
@@ -46,6 +46,7 @@ class Player(pygame.sprite.Sprite):
             self.vel.y = 0
         else:
             self.vel.y += self.gravity
+            self.rect.x += 2
 
         if (key[pygame.K_SPACE] and self.fuel > 0):
             self.Rocket()
@@ -82,6 +83,8 @@ class Player(pygame.sprite.Sprite):
         if (self.vel.y > -15):
             self.vel.y -= 2
             self.fuel -= 2
+            if (self.fuel < 0):
+                self.fuel = 0
 
     def RegenFuel(self):
         if (self.fuel < 100 and self.fuelTimer <= 0):
