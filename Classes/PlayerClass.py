@@ -27,6 +27,7 @@ class Player(pygame.sprite.Sprite):
         self.fuelTimer = 0
         self.hasHelmet = False
         self.debrisDamage = 34
+        self.fuelLimit = 100
 
     def update(self):
         # Movement
@@ -39,7 +40,6 @@ class Player(pygame.sprite.Sprite):
             self.rect.x = 0
         if (self.rect.x > 750):
             self.rect.x = 750
-
 
         # Gravity
         self.rect.y += self.vel.y
@@ -63,6 +63,11 @@ class Player(pygame.sprite.Sprite):
             self.RegenHP()
 
         self.RegenFuel()
+
+        # Cheats
+        if (key[pygame.K_w]):
+            self.fuelLimit = 999
+            self.fuel = 999
 
     def GetHit(self):
         self.health -= self.debrisDamage
@@ -89,7 +94,7 @@ class Player(pygame.sprite.Sprite):
                 self.fuel = 0
 
     def RegenFuel(self):
-        if (self.fuel < 100 and self.fuelTimer <= 0):
+        if (self.fuel < self.fuelLimit and self.fuelTimer <= 0):
             self.fuel += 1
         else:
             self.fuelTimer -= 0.1
