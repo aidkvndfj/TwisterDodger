@@ -4,9 +4,9 @@ import os
 
 gameFolder = os.path.dirname("..")
 imgFolder = os.path.join(gameFolder, 'Images')
-helmetImage = pygame.image.load(os.path.join(imgFolder, 'Golden Hard Hat.png'))
+helmetImage = pygame.image.load(os.path.join(imgFolder, 'Fuelcell.png'))
 
-class Helmet(pygame.sprite.Sprite):
+class Fuelcell(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
 
@@ -31,4 +31,4 @@ class Helmet(pygame.sprite.Sprite):
 
     def Collected(self):
         self.kill()
-        return "Helmet"
+        return "Fuelcell"

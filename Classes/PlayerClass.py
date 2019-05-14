@@ -26,6 +26,7 @@ class Player(pygame.sprite.Sprite):
         self.regenTimer = 0
         self.fuelTimer = 0
         self.hasHelmet = False
+        self.hasFuelcell = False
         self.debrisDamage = 34
         self.fuelLimit = 100
 
@@ -104,3 +105,8 @@ class Player(pygame.sprite.Sprite):
         self.debrisDamage = 25
         playerImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithHat.png'))
         self.image = playerImage
+
+    def GetFuelcell(self):
+        self.hasFuelcell = True
+        self.fuelLimit = 150
+        self.fuel = 150

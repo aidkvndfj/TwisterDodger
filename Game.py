@@ -21,6 +21,7 @@ from PlayerClass import *
 from TornadoClass import *
 from FireClass import *
 from HelmetPower import *
+from FuelcellPower import *
 
 def Game():
     # Constants
@@ -64,9 +65,13 @@ def Game():
         if (chance < 15):
             debris = Debris(WIDTH, HEIGHT)
             debrisSprites.add(debris)
-        if (chance == 8 and player.hasHelmet == False):
+        # chance = 57
+        if (chance == 45 and player.hasHelmet == False):
             helmet = Helmet(WIDTH, HEIGHT)
-            helmetSprites.add(helmet)
+            powerSprites.add(helmet)
+        if (chance == 57 and player.hasFuelcell == False):
+            fuelcell = Fuelcell(WIDTH, HEIGHT)
+            powerSprites.add(fuelcell)
 
 
     def drawGround():
@@ -81,7 +86,7 @@ def Game():
     global debrisSprites
     allSprites = pygame.sprite.Group()
     debrisSprites = pygame.sprite.Group()
-    helmetSprites = pygame.sprite.Group()
+    powerSprites = pygame.sprite.Group()
 
     # Sprites
     player = Player(WIDTH, HEIGHT, groundHeight)
@@ -98,9 +103,13 @@ def Game():
             running = False
         if (pygame.sprite.spritecollide(player, debrisSprites, True)):
             player.GetHit()
-        if (pygame.sprite.spritecollide(player, helmetSprites,  True)):
-            player.GetHelmet()
-
+        powerUp = pygame.sprite.spritecollideany(player, powerSprites)
+        if (powerUp != None):
+            type = powerUp.Collected()
+            if (type == "Helmet"):
+                player.GetHelmet()
+            if (type == "Fuelcell"):
+                player.GetFuelcell()
 
         # Game events
         for event in pygame.event.get():
@@ -113,7 +122,7 @@ def Game():
         # Update Sprites
         allSprites.update()
         debrisSprites.update()
-        helmetSprites.update()
+        powerSprites.update()
         fire.updateFire(player.rect.x, player.rect.y, player.rect.width, player.rect.height)
         # Update Text
         end = time.time()
@@ -124,7 +133,7 @@ def Game():
         pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30))
         pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2.5, 15))
         debrisSprites.draw(screen)
-        helmetSprites.draw(screen)
+        powerSprites.draw(screen)
         drawGround()
         allSprites.draw(screen)
         screen.blit(healthText, (10, 10))
