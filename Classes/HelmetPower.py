@@ -4,23 +4,13 @@ import os
 
 gameFolder = os.path.dirname("..")
 imgFolder = os.path.join(gameFolder, 'Images')
+helmetImage = pygame.image.load(os.path.join(imgFolder, 'Golden Hard Hat.png'))
 
-# Colors
-RED = (255, 0, 0)
-
-class Debris(pygame.sprite.Sprite):
+class Helmet(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
-        # Get Debris Image
-        pic = random.randint(1, 3)
-        if (pic == 1):
-            debrisImage = pygame.image.load(os.path.join(imgFolder, 'Stone1.png'))
-        if (pic == 2):
-            debrisImage = pygame.image.load(os.path.join(imgFolder, 'Stone2.png'))
-        if (pic == 3):
-            debrisImage = pygame.image.load(os.path.join(imgFolder, 'Stone3.png'))
 
-        self.image = debrisImage # Set image to the debris image
+        self.image = helmetImage # Set image to the debris image
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.centerx = WIDTH - 150 # Set the x to given x
         self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y

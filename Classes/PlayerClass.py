@@ -25,6 +25,8 @@ class Player(pygame.sprite.Sprite):
         self.fuel = 100
         self.regenTimer = 0
         self.fuelTimer = 0
+        self.hasHelmet = False
+        self.debrisDamage = 34
 
     def update(self):
         # Movement
@@ -63,7 +65,7 @@ class Player(pygame.sprite.Sprite):
         self.RegenFuel()
 
     def GetHit(self):
-        self.health -= 34
+        self.health -= self.debrisDamage
         self.regenTimer = 5
         if (self.health < 0):
             self.health = -0.1
@@ -91,3 +93,9 @@ class Player(pygame.sprite.Sprite):
             self.fuel += 1
         else:
             self.fuelTimer -= 0.1
+
+    def GetHelmet(self):
+        self.hasHelmet = True
+        self.debrisDamage = 25
+        playerImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithHat.png'))
+        self.image = playerImage
