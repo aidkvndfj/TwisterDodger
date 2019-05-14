@@ -20,8 +20,9 @@ from DebrisClass import *
 from PlayerClass import *
 from TornadoClass import *
 from FireClass import *
-from HelmetPower import *
-from FuelcellPower import *
+# from HelmetPower import *
+# from FuelcellPower import *
+from PowerupClasses import *
 
 def Game():
     # Constants
