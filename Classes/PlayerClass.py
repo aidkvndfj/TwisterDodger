@@ -69,6 +69,8 @@ class Player(pygame.sprite.Sprite):
         if (key[pygame.K_w]):
             self.fuelLimit = 999
             self.fuel = 999
+        if (key[pygame.K_e]):
+            self.debrisDamage = 0
 
     def GetHit(self):
         self.health -= self.debrisDamage

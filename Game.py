@@ -41,6 +41,7 @@ def Game():
     # Variables
     global groundHeight
     groundHeight = 120
+    gameTime = 0
 
     # Initialization
     pygame.init()
@@ -58,19 +59,21 @@ def Game():
     fuelFont = pygame.font.Font(None, 20)
     healthText = gameFont.render("Health:", True, (0, 0, 0))
     fuelText = fuelFont.render("Fuel:", True, (0, 0, 0))
+    verNum = gameFont.render("V4.0.0", True, (255, 255, 255))
 
     #~~~~~~~~~ Functions ~~~~~~~~~#
-    def spawnDebris():
+    def spawnDebris(difficulty):
         global WIDTH, HEIGHT, groundHeight
-        chance = random.randint(1, 100)
-        if (chance < 15):
+        chance = random.randint(1, 350)
+        powerChance = random.randint(1, 500)
+        if (chance < difficulty):
             debris = Debris(WIDTH, HEIGHT)
             debrisSprites.add(debris)
         # chance = 57
-        if (chance == 45 and player.hasHelmet == False):
+        if (powerChance == 45 and player.hasHelmet == False):
             helmet = Helmet(WIDTH, HEIGHT)
             powerSprites.add(helmet)
-        if (chance == 57 and player.hasFuelcell == False):
+        if (powerChance == 57 and player.hasFuelcell == False):
             fuelcell = Fuelcell(WIDTH, HEIGHT)
             powerSprites.add(fuelcell)
 
@@ -112,37 +115,48 @@ def Game():
             if (type == "Fuelcell"):
                 player.GetFuelcell()
 
+        end = time.time()
+        gameTime = (end - start)
+
         # Game events
         for event in pygame.event.get():
             if (event.type == pygame.QUIT): # If the 'X' in the corner is clicked exit
                 running = False
 
         # Spawn Debris
-        spawnDebris()
+        gameDifficulty = (4 * (1.014 ** (end - start)) + 21)
+        spawnDebris(gameDifficulty)
 
+        # Update Text
+        difficultyText = gameFont.render("Dificulty: {0:0.1f}".format(gameDifficulty), True, (255, 255, 255))
+        timeText = gameFont.render("Time: {0:0.1f}".format(gameTime), True, (255, 255, 255))
         # Update Sprites
         allSprites.update()
         debrisSprites.update()
         powerSprites.update()
         fire.updateFire(player.rect.x, player.rect.y, player.rect.width, player.rect.height)
-        # Update Text
-        end = time.time()
-        timeText = gameFont.render("Time: {0:0.1f}".format(end - start), True, (255, 255, 255))
 
         # Draw Frame
         screen.fill(BACKGROUND)
-        pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30))
-        pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2.5, 15))
-        debrisSprites.draw(screen)
-        powerSprites.draw(screen)
-        drawGround()
-        allSprites.draw(screen)
-        screen.blit(healthText, (10, 10))
-        screen.blit(fuelText, (10, 65))
-        screen.blit(timeText, (WIDTH - 95, HEIGHT - 25))
+        # Draw fuel and health bars
+        pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30)) # Health Bar
+        pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2.5, 15)) # Fuel Bar
+        # Draw the texts
+        screen.blit(healthText, (10, 10)) # The health
+        screen.blit(fuelText, (10, 65)) # The fuel
+        screen.blit(timeText, (WIDTH - 95, HEIGHT - 25)) # The time in the corner
+        screen.blit(difficultyText, (WIDTH - 250, HEIGHT - 25)) # The difficulty in the corner
+        screen.blit(verNum, (10, HEIGHT - 25)) # The version number
+        # Draw sprites
+        debrisSprites.draw(screen) # All the rocks
+        powerSprites.draw(screen) # All the power-ups
+        allSprites.draw(screen) # the player and tornado
+        # Draw the ground
+        drawGround() # The ground
 
+        # Display the new frame
         pygame.display.flip()
 
     pygame.font.quit()
     pygame.quit()
-    return end - start
+    return gameTime
