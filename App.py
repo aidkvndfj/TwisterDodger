@@ -5,6 +5,7 @@ import time
 scores = open("Scores.txt", "a+")
 
 while (True):
+    
     choice = gui.buttonbox("Welcome to Twister Dodger\nArrows Key To Move, Space To Fly\nCollect The Gold Helmet To Last Longer", "Twister Dodger", ("Play", "Close"))
     if (choice == "Play"):
         time = Game.Game()
