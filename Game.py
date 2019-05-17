@@ -63,7 +63,7 @@ def Game():
     fuelFont = pygame.font.Font(None, 20)
     healthText = gameFont.render("Health:", True, (0, 0, 0))
     fuelText = fuelFont.render("Fuel:", True, (0, 0, 0))
-    verNum = gameFont.render("V4.0.0", True, (255, 255, 255))
+    verNum = gameFont.render("V4.0.2", True, (255, 255, 255))
 
     #~~~~~~~~~ Functions ~~~~~~~~~#
     def spawnDebris(difficulty):

@@ -18,17 +18,23 @@ class Player(pygame.sprite.Sprite):
         # Player Variables
         self.gravity = 1
         self.vel = edm.Vector(10, 0)
+
         self.screenHeight = HEIGHT
         self.screenWidth = WIDTH
         self.groundHeight = GROUNDHEIGHT
+
         self.health = 100
-        self.fuel = 100
-        self.regenTimer = 0
-        self.fuelTimer = 0
-        self.hasHelmet = False
-        self.hasFuelcell = False
         self.debrisDamage = 34
+        self.regenTimer = 0
+        self.hasHelmet = False
+
+        self.hasRocketBoots = False
+        self.hasFuelcell = False
+        self.hasFuelRegen = False
+        self.fuel = 10
         self.fuelLimit = 100
+        self.fuelTimer = 0
+
 
     def update(self):
         # Movement
