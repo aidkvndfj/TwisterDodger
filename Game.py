@@ -155,7 +155,7 @@ def Game():
         debrisSprites.update()
         powerSprites.update()
         cloudSprites.update()
-        fire.updateFire(player.rect.x, player.rect.y, player.rect.width, player.rect.height)
+        fire.updateFire(player.rect.x, player.rect.y, player.rect.width, player.rect.height, player.playerFlying)
 
         # Draw Frame100
         screen.fill(BACKGROUND)

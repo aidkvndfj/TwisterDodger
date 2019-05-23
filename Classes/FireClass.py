@@ -16,8 +16,8 @@ class Fire(pygame.sprite.Sprite):
         self.groundHeight = GROUNDHEIGHT
         self.screenHeight = HEIGHT
 
-    def updateFire(self, playerx, playery, playerWidth, playerHeight):
-        if (playery + playerHeight > self.screenHeight  - self.groundHeight - 10):
+    def updateFire(self, playerx, playery, playerWidth, playerHeight, playerFlying):
+        if (playerFlying == False):
             self.rect.x = self.screenWidth + 35
         else:
             self.rect.y = playery + playerHeight
