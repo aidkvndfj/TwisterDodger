@@ -126,7 +126,7 @@ def Game():
         if (player.health <= 0):
             running = False
         if (pygame.sprite.spritecollide(player, debrisSprites, True)):
-            player.GetHit()
+            player.PlayerHit()
         powerUp = pygame.sprite.spritecollideany(player, powerSprites)
         if (powerUp != None):
             type = powerUp.Collected()
@@ -163,7 +163,7 @@ def Game():
         cloudSprites.draw(screen)
         # Draw fuel and health bars
         pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30)) # Health Bar
-        pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2.5, 15)) # Fuel Bar
+        pygame.draw.rect(screen, FUEL, (10, player.maxFuel, player.fuel * 2.5, 15)) # Fuel Bar
         # Draw the subtitle texts
         screen.blit(healthText, (10, 10)) # The health
         screen.blit(fuelText, (10, 65)) # The fuel

@@ -17,157 +17,98 @@ class Player(pygame.sprite.Sprite):
         self.rect.centerx = 200
         self.rect.centery = HEIGHT - 100
 
-        # Player Variables
-        self.gravity = 1.5
-        self.vel = edm.Vector(10, 0)
-
+        # Screen Variables
         self.screenHeight = HEIGHT
         self.screenWidth = WIDTH
         self.groundHeight = GROUNDHEIGHT
 
-        self.airTimer = 0
-        self.playerFlying = False
+        # Player Movemenet Variables
+        self.gravity = 1.5 # Gravity on the player
+        self.vel = edm.Vector(10, 0) # The velocity on the player as a 2D vector
+        self.airTime = 0 # The time that the player has been above the ground
+        self.playerFlying = False # Wheather or not the player is flying
 
-        self.health = 100
-        self.debrisDamage = 34
-        self.regenTimer = 0
-        self.hasHelmet = False
+        # Player Stat Varibales
+        self.health = 100 # The starting health
+        self.maxHelath = 100 # The starting max health
+        self.fuel = 100 # The starting fuel of the player
+        self.maxFuel = 100 # The starting maximum fuel
+        self.debrisDamage = 34 # The starting damage that the debris will do to the player
 
-        self.hasRocketBoots = False
-        self.hasFuelcell = False
-        self.hasFuelRegen = False
-        self.fuel = 100
-        self.fuelLimit = 100
-        self.fuelTimer = 0
+        # Player Equipment Variables
+        self.hasHelmet = False # Weather or not the player has the helmet (Player starts without it)
+        self.hasRocketBoots = False # Weather or not the player has the Rocket boots (Player starts without it)
+        self.hasBigFuelcell = False # Weather or not the player has the big fuel cell (Player starts without it)
+        self.hasFuelRegen = False # Weather or not the player has the fuel regen upgrade (Player starts without it)
+        self.hasFastFuelRegen = False # Weather or not the player has the fast fuel regen upgrade (Player starts without it)
+
+        # Player Timer Variables
+        self.regenWaitTimer = 0 # The wait timer for regenerating health
 
     # Standard update function
     def update(self):
-        key = pygame.key.get_pressed()
+        key = pygame.key.get_pressed() # the most recent key pressed
 
-        print(self.airTimer)
-
-        if (key[pygame.K_SPACE]):
-            if (self.IsGrounded()):
+        if (key[pygame.K_SPACE]): # if the space key is pressed
+            if (self.IsGrounded()): # If the player is on the ground, jump and set flying to false
                 self.PlayerJump()
                 self.playerFlying = False
-            elif (self.airTimer > 0.5):
+            elif (self.airTime > 0.5 and self.fuel > 0): # If the player has been in the air for more than 0.5 units, and has some fuel, start flying and set variable to true
                 self.PlayerFly()
                 self.playerFlying = True
 
-        self.PlayerWalk(key)
-        self.PlayerFall()
-
-        # Gravity
-        # self.rect.y += self.vel.y
-        # if (self.rect.bottom > self.screenHeight - self.groundHeight):
-        #     self.rect.bottom = self.screenHeight - self.groundHeight
-        #     self.vel.y = 0
-        # else:
-        #     self.vel.y += self.gravity
-        #     self.rect.x += 2
-        #
-        # if (key[pygame.K_SPACE] and self.fuel > 0):
-        #     self.Rocket()
-        # if (self.rect.y <= 0 ):
-        #     self.rect.y = 0
-        #     self.vel.y = 1
-
-        # Health and Fuel
-        if (self.rect.x > 600):
-            self.DrainHP()
-        else:
-            self.RegenHP()
-
-        # self.RegenFuel()
+        self.PlayerWalk(key) # Call the walk function
+        self.PlayerFall() # Call the fall function
 
         # Cheats
-        if (key[pygame.K_w]):
-            self.fuelLimit = 999
-            self.fuel = 999
-        if (key[pygame.K_e]):
+        if (key[pygame.K_w]): # If 'w' key is pressed than set the limit and fuel to 10000
+            self.fuelLimit = 10000
+            self.fuel = 10000
+        if (key[pygame.K_e]): # If 'e' key is pressed than set the damage to 0
             self.debrisDamage = 0
+
+    # Stat Functions
+    def PlayerHit(self):
+        self.health -= self.debrisDamage
 
     # Movement functions
     def PlayerWalk(self, key):
-        if (key[pygame.K_LEFT]):
+        if (key[pygame.K_LEFT]): # If the left key is pressed, remove x vel, subtract 2 because player is running from the tornado, from current pos
             self.rect.x -= self.vel.x - 2
-            self.image = playerLeftImage
-        if (key[pygame.K_RIGHT]):
+            self.image = playerLeftImage # set the image to looking left
+        if (key[pygame.K_RIGHT]): # If the right key is pressed, add x vel, plus 2 because player is running toawrd the tornado, from current pos
             self.rect.x += self.vel.x + 2
-            self.image = playerRightImage
-        if (self.rect.x < 0):
+            self.image = playerRightImage # set the image to looking right
+        if (self.rect.x < 0): # if the player is past the left side of the screen, set the pos to the left side of the screen
             self.rect.x = 0
-        if (self.rect.x > 750):
+        if (self.rect.x > 750): # if the player in the tornado, move the players pos to outside the tornado.
             self.rect.x = 750
 
     def PlayerJump(self):
-        self.vel.y = -13
+        self.vel.y = -13 # set the y velocity to -13
 
     def PlayerFly(self):
-        if (self.fuel > 0):
-            self.vel.y -= 2
-            self.fuel -= 1
-        else:
-            self.fuel = 0
+        self.vel.y -= 2 # subtract 2 from the velocity so that the player flys upwards.
+        self.fuel -= 1 # take away 1 from the current fuel.
 
     def PlayerFall(self):
-        self.rect.y += self.vel.y
-        if (self.rect.bottom > self.screenHeight - self.groundHeight):
-            self.rect.bottom = self.screenHeight - self.groundHeight
-            self.vel.y = 0
-        else:
+        self.rect.y += self.vel.y # add the y vel to the current y pos, moving the character down if posative or up is negative
+
+        if (self.rect.bottom > self.screenHeight - self.groundHeight): # if the bottom of the player is lower than the ground
+            self.rect.bottom = self.screenHeight - self.groundHeight # set the bototm of the player to the ground
+            self.vel.y = 0 # set the velocity to 0
+        else: # Otherwise, add the gravity to the y vel
             self.vel.y += self.gravity
 
-        if (self.IsGrounded() == False):
-            self.airTimer += 0.1
-        else:
-            self.airTimer = 0
-
-    # Stat Manipulation Functions
-    def GetHit(self):
-        self.health -= self.debrisDamage
-        self.regenTimer = 5
-        if (self.health < 0):
-            self.health = -0.1
-
-    def DrainHP(self):
-        if (self.health > 0):
-            self.health -= 0.5
-
-    def RegenHP(self):
-        if (self.health < 100 and self.regenTimer <= 0):
-            self.health += 1
-        else:
-            self.regenTimer -= 0.1
-
-    def Rocket(self):
-        self.fuelTimer = 5
-        if (self.vel.y > -15):
-            self.vel.y -= 2
-            self.fuel -= 2
-            if (self.fuel < 0):
-                self.fuel = 0
-
-    def RegenFuel(self):
-        if (self.fuel < self.fuelLimit and self.fuelTimer <= 0):
-            self.fuel += 1
-        else:
-            self.fuelTimer -= 0.1
-
-    def GetHelmet(self):
-        self.hasHelmet = True
-        self.debrisDamage = 25
-        playerImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithHat.png'))
-        self.image = playerImage
-
-    def GetFuelcell(self):
-        self.hasFuelcell = True
-        self.fuelLimit = 150
-        self.fuel = 150
+        if (self.IsGrounded() == False): # if the player is not touching the ground
+            self.airTime += 0.1 # add 0.1 to the air time
+        else: # Otherwise set the air time to 0
+            self.airTime = 0
 
     # Check Functions
     def IsGrounded(self):
+        # if the bototm of the palyer is within a small range just above and bellow the ground, than they player is considered grounded
         if (self.rect.bottom < self.screenHeight - self.groundHeight  + 5 and self.rect.bottom > self.screenHeight - self.groundHeight - 5):
             return True
-        else:
+        else: # if not within that range, the player is not grounded
             return False
