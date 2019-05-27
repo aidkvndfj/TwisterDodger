@@ -66,23 +66,54 @@ def Game():
     verNum = gameFont.render("V4.0.2", True, (255, 255, 255))
 
     #~~~~~~~~~ Functions ~~~~~~~~~#
-    def spawnDebris(difficulty):
+    def SpawnDebris(difficulty):
         global WIDTH, HEIGHT, groundHeight
         chance = random.randint(1, 350)
-        powerChance = random.randint(1, 500)
         if (chance < difficulty):
             debris = Debris(WIDTH, HEIGHT)
             debrisSprites.add(debris)
-        # chance = 57
-        if (powerChance == 45 and player.hasHelmet == False):
-            helmet = Helmet(WIDTH, HEIGHT)
-            powerSprites.add(helmet)
-        if (powerChance == 57 and player.hasFuelcell == False):
-            fuelcell = Fuelcell(WIDTH, HEIGHT)
-            powerSprites.add(fuelcell)
+        # powerChance = 45
+
+    def SpawnPowerup():
+        chance = random.randint(1, 400)
+
+        if (chance == 45 and player.GetHelmet() == False): # check if the number if correct and that the player doesn't already have helmet
+            helmet = Helmet(WIDTH, HEIGHT) # spawn the helmet
+            powerSprites.add(helmet) # add the helmet to the sprite list
+
+        if (chance == 256 and player.GetRocketBoots() == False): # check if the number is correct and that the player deosn't already have the rocket boots
+            rocketBoots = RocketBoots(WIDTH, HEIGHT)
+            powerSprites.add(rocketBoots)
+
+        if (player.GetRocketBoots() == True): # player must have rocket boots in order to spawn the upgrades.
+            if (chance == 104 and player.GetBigFuelcell() == False): # check if the number if correct and that the player doesn't already have big fuel cell
+                bigFuelcell = BigFuelcell(WIDTH, HEIGHT) # spawn big fuel cell
+                powerSprites.add(bigFuelcell) # add the big fuel cell to the sprite list
+
+            if (chance == 365 and player.GetFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fuel regenerator
+                fuelRegenerator = FuelRegenerator(WIDTH, HEIGHT) # spawn fuel regenerator
+                powerSprites.add(fuelRegenerator) # add the fuel regenerator to the sprite list
+            elif (chance == 365 and player.GetFastFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fast fuel regenerator (only possible is the player already has fuel regenerator)
+                fastFuelRegenerator = FastFuelRegenerator(WIDTH, HEIGHT) # spawn fast fuel regenerator
+                powerSprites.add(fastFuelRegenerator) # add the fast fuel regenerator to the sprite list
 
 
-    def drawGround():
+    def CollectPowerup(powerup): # Gets called when the powerup var is changed from "None"
+        if (powerup == "Helmet"): # If the type is a helmet
+            player.CollectHelmet() # give the player the helmet powerup
+        elif (powerup == "RocketBoots"): # if the type is RocketBoots
+            player.CollectRocketBoots() # give the player the Rocket Boots
+        elif (powerup == "BigFuelcell"): # if the type is a big fuelcell
+            player.CollectBigFuelcell() # give the player the big fuelcell
+        elif (powerup == "FuelRegenerator"): # if the type is Fuel Regenerator
+            player.CollectFuelRegenerator() # give the player the fuel regenerator
+        elif (powerup == "FastFuelRegenerator"): # if the type is fast Fuel Regenerator
+            player.CollectFastFuelRegenerator() # give the player the fast fuel regenerator
+        else: # otherwise there is a error
+            print("ERROR POWERUP TYPE NOT GIVEN OR IS INCORRECT. TYPE GIVEN '{}'".format(powerup))
+
+
+    def DrawGround():
         global WIDTH, HEIGHT, groundHeight, spawnGrass, grassX, grassY
         pygame.draw.rect(screen, GROUND, (0, HEIGHT - groundHeight, WIDTH, groundHeight))
         pygame.draw.rect(screen, GRASS, (0, HEIGHT - groundHeight, WIDTH, 30))
@@ -127,13 +158,10 @@ def Game():
             running = False
         if (pygame.sprite.spritecollide(player, debrisSprites, True)):
             player.PlayerHit()
+
         powerUp = pygame.sprite.spritecollideany(player, powerSprites)
         if (powerUp != None):
-            type = powerUp.Collected()
-            if (type == "Helmet"):
-                player.GetHelmet()
-            if (type == "Fuelcell"):
-                player.GetFuelcell()
+            CollectPowerup(powerUp.Collected())
 
         end = time.time()
         gameTime = (end - start)
@@ -145,7 +173,8 @@ def Game():
 
         # Spawn Debris
         gameDifficulty = (4 * (1.014 ** (end - start)) + 21)
-        spawnDebris(gameDifficulty)
+        SpawnDebris(gameDifficulty)
+        SpawnPowerup()
 
         # Update Text
         difficultyText = gameFont.render("Dificulty: {0:0.1f}".format(gameDifficulty), True, (255, 255, 255))
@@ -161,18 +190,18 @@ def Game():
         screen.fill(BACKGROUND)
         # Draw the clouds
         cloudSprites.draw(screen)
-        # Draw fuel and health bars
+        # Draw fuel and health bars/texts
         pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30)) # Health Bar
-        pygame.draw.rect(screen, FUEL, (10, player.maxFuel, player.fuel * 2.5, 15)) # Fuel Bar
-        # Draw the subtitle texts
         screen.blit(healthText, (10, 10)) # The health
-        screen.blit(fuelText, (10, 65)) # The fuel
+        if (player.GetRocketBoots() == True):
+            pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2, 15)) # Fuel Bar
+            screen.blit(fuelText, (10, 65)) # The fuel
         # Draw sprites
         debrisSprites.draw(screen) # All the rocks
         powerSprites.draw(screen) # All the power-ups
         allSprites.draw(screen) # the player and tornado
         # Draw the ground
-        drawGround() # The ground
+        DrawGround() # The ground
         # Draw the info texts
         screen.blit(timeText, (WIDTH - 95, HEIGHT - 25)) # The time in the corner
         screen.blit(difficultyText, (WIDTH - 250, HEIGHT - 25)) # The difficulty in the corner
