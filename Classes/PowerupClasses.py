@@ -7,6 +7,9 @@ imgFolder = os.path.join(gameFolder, 'Images')
 
 bigFuelcellImage = pygame.image.load(os.path.join(imgFolder, 'BigFuelcell.png'))
 helmetImage = pygame.image.load(os.path.join(imgFolder, 'Golden Hard Hat.png'))
+rocketbootsImage = pygame.image.load(os.path.join(imgFolder, 'RocketBoots.png'))
+fuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'FuelRegenerator.png'))
+fastFuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'FastFuelRegenerator.png'))
 
 class Helmet(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
@@ -39,8 +42,7 @@ class RocketBoots(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.Surface((35, 35))
-        self.image.fill((0, 0, 255))
+        self.image = rocketbootsImage
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.centerx = WIDTH - 150 # Set the x to given x
         self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y
@@ -94,8 +96,7 @@ class FuelRegenerator(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.Surface((20, 20))
-        self.image.fill((255, 0, 0))
+        self.image = fuelRegeneratorImage
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.centerx = WIDTH - 150 # Set the x to given x
         self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y
@@ -122,8 +123,7 @@ class FastFuelRegenerator(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.Surface((20, 20))
-        self.image.fill((0, 255, 0))
+        self.image = fastFuelRegeneratorImage
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.centerx = WIDTH - 150 # Set the x to given x
         self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y

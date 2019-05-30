@@ -5,15 +5,13 @@ import Eric_Dumb_Module as edm
 # Setup Images
 gameFolder = os.path.dirname("..")
 imgFolder = os.path.join(gameFolder, 'Images')
-playerRightHelmetImage = pygame.image.load(os.path.join(imgFolder, 'Player-right-helmet.png'))
-playerLeftHelmetImage = pygame.image.load(os.path.join(imgFolder, 'Player-left-helmet.png'))
-playerRightImage = pygame.image.load(os.path.join(imgFolder, 'Player-right.png'))
-playerLeftImage = pygame.image.load(os.path.join(imgFolder, 'Player-left.png'))
+playerImage = pygame.image.load(os.path.join(imgFolder, 'Player.png'))
+playerWithHelmetImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithHelmet.png'))
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, GROUNDHEIGHT):
         pygame.sprite.Sprite.__init__(self)
-        self.image = playerRightImage # Sets the default image of the player to the player looking right
+        self.image = playerImage # Sets the default image of the player to the player looking right
         self.rect = self.image.get_rect() # Sets the rect box of the player to the image size
         self.rect.centerx = 200 # set the center x to spawn location
         self.rect.centery = HEIGHT - GROUNDHEIGHT # set the centery to the ground
@@ -195,12 +193,12 @@ class Player(pygame.sprite.Sprite):
 # ~~~~~ Sprite Image Change Functions ~~~~~ #
     def PlayerLookRight(self):
         if (self.hasHelmet): # If the player has the helmet, show the player with a helmet
-            self.image = playerRightHelmetImage # set the image to looking right
+            self.image = playerWithHelmetImage # set the image to looking right
         else: # Default to no equipment
-            self.image = playerRightImage # set the image to looking right
+            self.image = playerImage # set the image to looking right
 
     def PlayerLookLeft(self):
         if (self.hasHelmet): # If the player has the helmet, show the player with a helmet
-            self.image = playerLeftHelmetImage # set the image to looking left
+            self.image = pygame.transform.flip(playerWithHelmetImage, True, False) # Flip the image to looking left
         else: # Default to no equipment
-            self.image = playerLeftImage # set the image to looking left
+            self.image = pygame.transform.flip(playerImage, True, False) # Flip the image to looking left

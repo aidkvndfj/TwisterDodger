@@ -74,26 +74,27 @@ def Game():
             debrisSprites.add(debris)
         # powerChance = 45
 
-    def SpawnPowerup():
-        chance = random.randint(1, 400)
+    def SpawnPowerup(difficulty):
+        difficultyModifier = int(difficulty / 2)
+        chance = random.randint(1, 350 - difficultyModifier)
 
         if (chance == 45 and player.GetHelmet() == False): # check if the number if correct and that the player doesn't already have helmet
             helmet = Helmet(WIDTH, HEIGHT) # spawn the helmet
             powerSprites.add(helmet) # add the helmet to the sprite list
 
-        if (chance == 256 and player.GetRocketBoots() == False): # check if the number is correct and that the player deosn't already have the rocket boots
+        if (chance == 78 and player.GetRocketBoots() == False): # check if the number is correct and that the player deosn't already have the rocket boots
             rocketBoots = RocketBoots(WIDTH, HEIGHT)
             powerSprites.add(rocketBoots)
 
         if (player.GetRocketBoots() == True): # player must have rocket boots in order to spawn the upgrades.
-            if (chance == 104 and player.GetBigFuelcell() == False): # check if the number if correct and that the player doesn't already have big fuel cell
+            if (chance == 20 and player.GetBigFuelcell() == False): # check if the number if correct and that the player doesn't already have big fuel cell
                 bigFuelcell = BigFuelcell(WIDTH, HEIGHT) # spawn big fuel cell
                 powerSprites.add(bigFuelcell) # add the big fuel cell to the sprite list
 
-            if (chance == 365 and player.GetFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fuel regenerator
+            if (chance == 15 and player.GetFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fuel regenerator
                 fuelRegenerator = FuelRegenerator(WIDTH, HEIGHT) # spawn fuel regenerator
                 powerSprites.add(fuelRegenerator) # add the fuel regenerator to the sprite list
-            elif (chance == 365 and player.GetFastFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fast fuel regenerator (only possible is the player already has fuel regenerator)
+            elif (chance == 15 and player.GetFastFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fast fuel regenerator (only possible is the player already has fuel regenerator)
                 fastFuelRegenerator = FastFuelRegenerator(WIDTH, HEIGHT) # spawn fast fuel regenerator
                 powerSprites.add(fastFuelRegenerator) # add the fast fuel regenerator to the sprite list
 
@@ -174,7 +175,7 @@ def Game():
         # Spawn Debris
         gameDifficulty = (4 * (1.014 ** (end - start)) + 21)
         SpawnDebris(gameDifficulty)
-        SpawnPowerup()
+        SpawnPowerup(gameDifficulty)
 
         # Update Text
         difficultyText = gameFont.render("Dificulty: {0:0.1f}".format(gameDifficulty), True, (255, 255, 255))
