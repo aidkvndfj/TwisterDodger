@@ -38,7 +38,7 @@ class Helmet(pygame.sprite.Sprite):
         self.kill() # kill the object
         return "Helmet" # return the powerup type
 
-class RocketBoots(pygame.sprite.Sprite):
+class Rocketboots(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
         pygame.sprite.Sprite.__init__(self)
 
@@ -63,7 +63,7 @@ class RocketBoots(pygame.sprite.Sprite):
 
     def Collected(self): # gets called if the player collects the rocket boots
         self.kill() # kill the object
-        return "RocketBoots" # return the powerup type
+        return "Rocketboots" # return the powerup type
 
 class BigFuelcell(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
@@ -145,3 +145,34 @@ class FastFuelRegenerator(pygame.sprite.Sprite):
     def Collected(self): # gets called if the player collects the fast fuel regenerator
         self.kill() # kill the object
         return "FastFuelRegenerator" # return the powerup type
+
+class FuelPickup(pygame.sprite.Sprite):
+    def __init__(self, WIDTH, HEIGHT, groundHeight):
+        pygame.sprite.Sprite.__init__(self)
+
+        self.image = pygame.Surface((30, 30))
+        self.image.fill((0, 255, 0))
+        self.rect = self.image.get_rect() #set the rect to the image rect
+        self.rect.centerx = WIDTH - 150 # Set the x to given x
+        self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y
+
+        # Big FuelPickup Variables
+        self.screenHeight = HEIGHT
+        self.groundHeight = groundHeight
+        self.gravity = 0.5
+        self.xVel = -random.randint(10, 25)
+        self.yVel = 0
+
+    def update(self):
+        if (self.rect.bottom > self.screenHeight - self.groundHeight): # if the fuel pickup is bellow the screen
+            self.rect.bottom = self.screenHeight - self.groundHeight # set the fuel y pos to the ground
+            self.yVel = 0
+            self.xVel = 0
+
+        self.yVel += self.gravity # add gravity to y vel
+        self.rect.centerx += self.xVel # move x pos by x vel
+        self.rect.centery += self.yVel # move y pos by y vel
+
+    def Collected(self): # gets called if the player collects the fuel pickup
+        self.kill() # kill the object
+        return "FuelPickup" # return the powerup type

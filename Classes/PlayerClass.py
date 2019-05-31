@@ -1,5 +1,7 @@
 import pygame
 import os
+import sys
+sys.path.insert(0, './Dependencies')
 import Eric_Dumb_Module as edm
 
 # Setup Images
@@ -7,6 +9,12 @@ gameFolder = os.path.dirname("..")
 imgFolder = os.path.join(gameFolder, 'Images')
 playerImage = pygame.image.load(os.path.join(imgFolder, 'Player.png'))
 playerWithHelmetImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithHelmet.png'))
+playerWithRocketbootsImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithRocketboots.png'))
+playerWithRocketbootsAndHelmetImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithRocketbootsAndHelmet.png'))
+playerWithFuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithFuelRegenerator.png'))
+playerWithFuelRegeneratorAndHelmetImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithFuelRegeneratorAndHelmet.png'))
+playerWithFastFuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithFastFuelRegenerator.png'))
+playerWithFastFuelRegeneratorAndHelmetImage = pygame.image.load(os.path.join(imgFolder, 'PlayerWithFastFuelRegeneratorAndHelmet.png'))
 
 class Player(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, GROUNDHEIGHT):
@@ -36,7 +44,7 @@ class Player(pygame.sprite.Sprite):
 
         # Player Equipment Variables
         self.hasHelmet = False # Weather or not the player has the helmet (Player starts without it)
-        self.hasRocketBoots = False # Weather or not the player has the Rocket boots (Player starts without it)
+        self.hasRocketboots = False # Weather or not the player has the Rocket boots (Player starts without it)
         self.hasFuelRegenerator = False # Weather or not the player has the fuel regen upgrade (Player starts without it)
         self.hasFastFuelRegenerator = False# Weather or not the player has the fast fuel regen upgrade (Player starts without it)
         self.hasBigFuelcell = False # Weather or not the player has the big fuel cell (Player starts without it)
@@ -53,7 +61,7 @@ class Player(pygame.sprite.Sprite):
             if (self.IsGrounded()): # If the player is on the ground, jump and set flying to false
                 self.PlayerJump()
                 self.playerFlying = False
-            elif (self.airTime > 0.5 and self.fuel > 0 and self.hasRocketBoots == True): # If the player has been in the air for more than 0.5 units, and has some fuel, start flying and set variable to true
+            elif (self.airTime > 0.5 and self.fuel > 0 and self.hasRocketboots == True): # If the player has been in the air for more than 0.5 units, and has some fuel, start flying and set variable to true
                 self.PlayerFly()
                 self.playerFlying = True
 
@@ -114,8 +122,13 @@ class Player(pygame.sprite.Sprite):
     def CollectFastFuelRegenerator(self): # gets called if the player runs into a fast fuel regenerator poweurp
         self.hasFastFuelRegenerator = True # Sets the has fast fuel regenerator var to true meaning the player has the fuel regenerator
 
-    def CollectRocketBoots(self):
-        self.hasRocketBoots = True
+    def CollectRocketboots(self):
+        self.hasRocketboots = True
+
+    def CollectFuelPickup(self):
+        self.fuel += 10
+        if (self.fuel > 100):
+            self.fuel = 100
 
 # ~~~~~ Movement Functions ~~~~~ #
     def PlayerWalk(self, key):
@@ -186,19 +199,43 @@ class Player(pygame.sprite.Sprite):
     def GetFastFuelRegenerator(self):
         return self.hasFastFuelRegenerator # returns the current state of the has fast fuel rengerator var
 
-    def GetRocketBoots(self):
-        return self.hasRocketBoots # returns the current state of the has Rocket Boots var
+    def GetRocketboots(self):
+        return self.hasRocketboots # returns the current state of the has Rocket Boots var
 
 
 # ~~~~~ Sprite Image Change Functions ~~~~~ #
     def PlayerLookRight(self):
-        if (self.hasHelmet): # If the player has the helmet, show the player with a helmet
-            self.image = playerWithHelmetImage # set the image to looking right
+        if (self.hasFastFuelRegenerator and self.hasHelmet):
+            self.image = playerWithFastFuelRegeneratorAndHelmetImage
+        elif (self.hasFastFuelRegenerator):
+            self.image = playerWithFastFuelRegeneratorImage
+        elif (self.hasFuelRegenerator and self.hasHelmet):
+            self.image = playerWithFuelRegeneratorAndHelmetImage
+        elif (self.hasFuelRegenerator):
+            self.image = playerWithFuelRegeneratorImage
+        elif (self.hasRocketboots and self.hasHelmet):
+            self.image = playerWithRocketbootsAndHelmetImage
+        elif (self.hasRocketboots):
+            self.image = playerWithRocketbootsImage
+        elif (self.hasHelmet):
+            self.image = playerWithHelmetImage
         else: # Default to no equipment
             self.image = playerImage # set the image to looking right
 
     def PlayerLookLeft(self):
-        if (self.hasHelmet): # If the player has the helmet, show the player with a helmet
-            self.image = pygame.transform.flip(playerWithHelmetImage, True, False) # Flip the image to looking left
+        if (self.hasFastFuelRegenerator and self.hasHelmet):
+            self.image = pygame.transform.flip(playerWithFastFuelRegeneratorAndHelmetImage, True, False)
+        elif (self.hasFastFuelRegenerator):
+            self.image = pygame.transform.flip(playerWithFastFuelRegeneratorImage, True, False)
+        elif (self.hasFuelRegenerator and self.hasHelmet):
+            self.image = pygame.transform.flip(playerWithFuelRegeneratorAndHelmetImage, True, False)
+        elif (self.hasFuelRegenerator):
+            self.image = pygame.transform.flip(playerWithFuelRegeneratorImage, True, False)
+        elif (self.hasRocketboots and self.hasHelmet):
+            self.image = pygame.transform.flip(playerWithRocketbootsAndHelmetImage, True, False)
+        elif (self.hasRocketboots):
+            self.image = pygame.transform.flip(playerWithRocketbootsImage, True, False)
+        elif (self.hasHelmet):
+            self.image = pygame.transform.flip(playerWithHelmetImage, True, False)
         else: # Default to no equipment
-            self.image = pygame.transform.flip(playerImage, True, False) # Flip the image to looking left
+            self.image = pygame.transform.flip(playerImage, True, False)

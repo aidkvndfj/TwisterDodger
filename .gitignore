@@ -5,8 +5,9 @@ Classes/FireClass.pyc
 Classes/PowerupClasses.pyc
 Classes/CloudClass.pyc
 
+Dependencies/Eric_Dumb_Module.pyc
+Dependencies/PyButton.pyc
+
 Game.pyc
-Eric_Dumb_Module.pyc
-PyButton.pyc
 build
 App.spec

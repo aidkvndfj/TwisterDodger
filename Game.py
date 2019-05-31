@@ -9,10 +9,10 @@
 # Needed Imports
 import pygame
 import random
-import sys
-import Eric_Dumb_Module as edm
 import time
-import easygui as gui
+import sys
+sys.path.insert(0, './Dependencies')
+import Eric_Dumb_Module as edm
 
 # Class Imports
 sys.path.insert(0, 'Classes')
@@ -82,14 +82,18 @@ def Game():
             helmet = Helmet(WIDTH, HEIGHT) # spawn the helmet
             powerSprites.add(helmet) # add the helmet to the sprite list
 
-        if (chance == 78 and player.GetRocketBoots() == False): # check if the number is correct and that the player deosn't already have the rocket boots
-            rocketBoots = RocketBoots(WIDTH, HEIGHT)
-            powerSprites.add(rocketBoots)
+        if (chance == 78 and player.GetRocketboots() == False): # check if the number is correct and that the player deosn't already have the rocket boots
+            rocketboots = Rocketboots(WIDTH, HEIGHT)
+            powerSprites.add(rocketboots)
 
-        if (player.GetRocketBoots() == True): # player must have rocket boots in order to spawn the upgrades.
+        if (player.GetRocketboots() == True): # player must have rocket boots in order to spawn the upgrades.
             if (chance == 20 and player.GetBigFuelcell() == False): # check if the number if correct and that the player doesn't already have big fuel cell
                 bigFuelcell = BigFuelcell(WIDTH, HEIGHT) # spawn big fuel cell
                 powerSprites.add(bigFuelcell) # add the big fuel cell to the sprite list
+                
+            if ((chance == 36 or chance == 4) and len(powerSprites) < 10):
+                fuelPickup = FuelPickup(WIDTH, HEIGHT, groundHeight)
+                powerSprites.add(fuelPickup)
 
             if (chance == 15 and player.GetFuelRegenerator() == False): # check if the number if correct and that the player doesn't already have the fuel regenerator
                 fuelRegenerator = FuelRegenerator(WIDTH, HEIGHT) # spawn fuel regenerator
@@ -102,14 +106,16 @@ def Game():
     def CollectPowerup(powerup): # Gets called when the powerup var is changed from "None"
         if (powerup == "Helmet"): # If the type is a helmet
             player.CollectHelmet() # give the player the helmet powerup
-        elif (powerup == "RocketBoots"): # if the type is RocketBoots
-            player.CollectRocketBoots() # give the player the Rocket Boots
+        elif (powerup == "Rocketboots"): # if the type is Rocketboots
+            player.CollectRocketboots() # give the player the Rocket Boots
         elif (powerup == "BigFuelcell"): # if the type is a big fuelcell
             player.CollectBigFuelcell() # give the player the big fuelcell
         elif (powerup == "FuelRegenerator"): # if the type is Fuel Regenerator
             player.CollectFuelRegenerator() # give the player the fuel regenerator
         elif (powerup == "FastFuelRegenerator"): # if the type is fast Fuel Regenerator
             player.CollectFastFuelRegenerator() # give the player the fast fuel regenerator
+        elif (powerup == "FuelPickup"): # if the type is a fuel pickup
+            player.CollectFuelPickup() # have the player gain some fuel
         else: # otherwise there is a error
             print("ERROR POWERUP TYPE NOT GIVEN OR IS INCORRECT. TYPE GIVEN '{}'".format(powerup))
 
@@ -194,7 +200,7 @@ def Game():
         # Draw fuel and health bars/texts
         pygame.draw.rect(screen, RED, (10, 30, player.health * 4, 30)) # Health Bar
         screen.blit(healthText, (10, 10)) # The health
-        if (player.GetRocketBoots() == True):
+        if (player.GetRocketboots() == True):
             pygame.draw.rect(screen, FUEL, (10, 80, player.fuel * 2, 15)) # Fuel Bar
             screen.blit(fuelText, (10, 65)) # The fuel
         # Draw sprites
