@@ -10,6 +10,7 @@ helmetImage = pygame.image.load(os.path.join(imgFolder, 'Golden Hard Hat.png'))
 rocketbootsImage = pygame.image.load(os.path.join(imgFolder, 'RocketBoots.png'))
 fuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'FuelRegenerator.png'))
 fastFuelRegeneratorImage = pygame.image.load(os.path.join(imgFolder, 'FastFuelRegenerator.png'))
+fuelPickupImage = pygame.image.load(os.path.join(imgFolder, 'FuelPickup.png'))
 
 class Helmet(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT):
@@ -150,8 +151,7 @@ class FuelPickup(pygame.sprite.Sprite):
     def __init__(self, WIDTH, HEIGHT, groundHeight):
         pygame.sprite.Sprite.__init__(self)
 
-        self.image = pygame.Surface((30, 30))
-        self.image.fill((0, 255, 0))
+        self.image = fuelPickupImage
         self.rect = self.image.get_rect() #set the rect to the image rect
         self.rect.centerx = WIDTH - 150 # Set the x to given x
         self.rect.centery = random.randint(0, HEIGHT - 200) # Set the y to given y
@@ -168,6 +168,7 @@ class FuelPickup(pygame.sprite.Sprite):
             self.rect.bottom = self.screenHeight - self.groundHeight # set the fuel y pos to the ground
             self.yVel = 0
             self.xVel = 0
+            self.gravity = 0
 
         self.yVel += self.gravity # add gravity to y vel
         self.rect.centerx += self.xVel # move x pos by x vel
